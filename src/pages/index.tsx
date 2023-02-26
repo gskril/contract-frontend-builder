@@ -1,5 +1,8 @@
 import Head from 'next/head'
 
+import { Contract } from '../components/Contract'
+import { abi, contractAddress } from '../contract'
+
 export default function Home() {
   return (
     <>
@@ -12,7 +15,16 @@ export default function Home() {
         <meta property="og:description" content="" />
       </Head>
 
-      <main></main>
+      <main>
+        <Contract.Root address={contractAddress} abi={abi}>
+          <Contract.Input
+            param="name"
+            placeholder="gregskril.eth"
+            label="Name to set as Primary ENS Name"
+          />
+          <Contract.Button functionName="setName" />
+        </Contract.Root>
+      </main>
     </>
   )
 }

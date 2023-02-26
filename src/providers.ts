@@ -8,7 +8,7 @@ const ALCHEMY_ID = process.env.NEXT_PUBLIC_ALCHEMY_ID || ''
 
 export const { chains, provider } = configureChains(
   [mainnet, goerli],
-  [alchemyProvider({ apiKey: ALCHEMY_ID }), publicProvider()]
+  [publicProvider()]
 )
 
 const { connectors } = getDefaultWallets({
