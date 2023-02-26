@@ -1,4 +1,8 @@
-export const contractAddress = '0x084b1c3C81545d370f3634392De611CaaBFf8148'
+export const getReverseRegistrarAddress = (chainId: number | undefined) => {
+  return chainId === 5
+    ? '0x9a879320A9F7ad2BBb02063d67baF5551D6BD8B0'
+    : '0x084b1c3c81545d370f3634392de611caabff8148'
+}
 
 export const abi = [
   {

@@ -1,9 +1,19 @@
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 import Head from 'next/head'
+import { useAccount, useEnsName, useNetwork } from 'wagmi'
 
 import { Contract } from '../components/Contract'
-import { abi, contractAddress } from '../contract'
+import { abi, getReverseRegistrarAddress } from '../contract'
 
 export default function Home() {
+  const { chain } = useNetwork()
+  const { address } = useAccount()
+  const { data: ensName } = useEnsName({
+    address,
+    staleTime: 0,
+  })
+  const contractAddress = getReverseRegistrarAddress(chain?.id)
+
   return (
     <>
       <Head>
@@ -16,7 +26,15 @@ export default function Home() {
       </Head>
 
       <main>
-        <Contract.Root address={contractAddress} abi={abi}>
+        <ConnectButton showBalance={false} />
+
+        {ensName && <p>Current primary ENS name: {ensName}</p>}
+
+        <Contract.Root
+          abi={abi}
+          address={contractAddress}
+          style={{ marginTop: '1rem' }}
+        >
           <Contract.Input
             param="name"
             placeholder="gregskril.eth"

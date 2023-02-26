@@ -20,13 +20,13 @@ const Container = styled.form`
   border-radius: 8px;
 `
 
-interface RootProps extends React.HTMLAttributes<HTMLDivElement> {
+interface RootProps extends React.HTMLAttributes<HTMLFormElement> {
   abi: Abi
   address: `0x${string}`
   children: React.ReactNode
 }
 
-export function Root({ abi, address, children }: RootProps) {
+export function Root({ abi, address, children, ...props }: RootProps) {
   const { isConnected } = useAccount()
   const { openConnectModal } = useConnectModal()
 
@@ -62,7 +62,9 @@ export function Root({ abi, address, children }: RootProps) {
     <ContractContext.Provider
       value={{ inputs, setInputs, setFunctionName, state }}
     >
-      <Container onSubmit={handleSubmit}>{children}</Container>
+      <Container onSubmit={handleSubmit} {...props}>
+        {children}
+      </Container>
     </ContractContext.Provider>
   )
 }
