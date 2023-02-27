@@ -4,15 +4,19 @@ import { useAccount, useEnsName, useNetwork } from 'wagmi'
 
 import { Contract } from '../components/Contract'
 import { abi, getReverseRegistrarAddress } from '../contract'
+import useIsMounted from '../hooks/useIsMounted'
 
 export default function Home() {
   const { chain } = useNetwork()
   const { address } = useAccount()
+
+  const isMounted = useIsMounted()
+  const contractAddress = getReverseRegistrarAddress(chain?.id)
+
   const { data: ensName } = useEnsName({
     address,
     staleTime: 0,
   })
-  const contractAddress = getReverseRegistrarAddress(chain?.id)
 
   return (
     <>
@@ -26,19 +30,20 @@ export default function Home() {
       </Head>
 
       <main>
-        <ConnectButton showBalance={false} />
+        {isMounted && (
+          <div style={{ marginBottom: '1rem' }}>
+            <ConnectButton showBalance={false} />
+            <p style={{ marginTop: '0.25rem' }}>
+              Current primary ENS name: {ensName}
+            </p>
+          </div>
+        )}
 
-        {ensName && <p>Current primary ENS name: {ensName}</p>}
-
-        <Contract.Root
-          abi={abi}
-          address={contractAddress}
-          style={{ marginTop: '1rem' }}
-        >
+        <Contract.Root abi={abi} address={contractAddress}>
           <Contract.Input
             param="name"
+            label="Name"
             placeholder="gregskril.eth"
-            label="Name to set as Primary ENS Name"
           />
           <Contract.Button functionName="setName" />
         </Contract.Root>

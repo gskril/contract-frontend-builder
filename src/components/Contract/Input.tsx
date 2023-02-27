@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 
 import { ContractContext } from './context'
+import { InputWrapper, Label, StyledInput } from './styles'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
@@ -23,19 +24,9 @@ export function Input({ label, param, ...props }: InputProps) {
   }, [value])
 
   return (
-    <>
-      <div className="container">
-        {label && <label htmlFor={param}>{label}</label>}
-        <input {...props} onChange={(e) => setValue(e.target.value)} />
-      </div>
-
-      <style jsx>{`
-        .container {
-          display: flex;
-          flex-direction: column;
-          gap: 0.125rem;
-        }
-      `}</style>
-    </>
+    <InputWrapper>
+      {label && <Label htmlFor={param}>{label}</Label>}
+      <StyledInput {...props} onChange={(e) => setValue(e.target.value)} />
+    </InputWrapper>
   )
 }

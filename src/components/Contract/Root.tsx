@@ -1,24 +1,15 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { Abi } from 'abitype'
-import { useState } from 'react'
-import styled from 'styled-components'
-import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi'
+import { useEffect, useState } from 'react'
+import {
+  useAccount,
+  useContractWrite,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from 'wagmi'
 
 import { ContractContext, InputValue, State } from './context'
-
-const Container = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  width: 100%;
-
-  /* temporary styles for dev */
-  padding: 1rem;
-  background-color: #fafcff;
-  border: 1px solid #cbcbcb;
-  box-shadow: 1px 4px 26px rgba(78, 162, 240, 0.25);
-  border-radius: 8px;
-`
+import { Container } from './styles'
 
 interface RootProps extends React.HTMLAttributes<HTMLFormElement> {
   abi: Abi
@@ -42,10 +33,50 @@ export function Root({ abi, address, children, ...props }: RootProps) {
     abi,
     functionName,
     args: [input?.value],
+    onError: (error) => {
+      setState({ status: 'error', message: error.message })
+    },
   })
 
   // @ts-ignore (wagmi types throw error even though it works)
   const tx = useContractWrite(prepareTx.config)
+
+  // Handle state from tx
+  useEffect(() => {
+    if (tx?.data?.hash) {
+      setState({ status: 'pending', message: tx.data.hash })
+    } else if (tx.isError) {
+      setState({ status: 'error', message: tx.error?.message })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tx?.data?.hash, tx.isError])
+
+  const txReceipt = useWaitForTransaction({
+    hash: tx?.data?.hash,
+    onSuccess: () => {
+      setState({ status: 'success' })
+    },
+    onError: (error) => {
+      setState({ status: 'error', message: error.message })
+    },
+  })
+
+  // Handle state from txReceipt
+  useEffect(() => {
+    if (txReceipt.isSuccess) {
+      setState({ status: 'success', message: tx.data?.hash })
+    } else if (txReceipt.isError) {
+      setState({ status: 'error', message: txReceipt.error?.message })
+    } else if (txReceipt.isLoading) {
+      setState({ status: 'pending', message: tx.data?.hash })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    txReceipt.error?.message,
+    txReceipt.isError,
+    txReceipt.isLoading,
+    txReceipt.isSuccess,
+  ])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
