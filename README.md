@@ -1,17 +1,12 @@
-## Opinionated Web3 Project Starter Template
+## React Library for Building Smart Contract Frontends
 
-This is a starter template for building web3 projects using my preferred stack:
+Normally when building a smart contract frontend, you have to:
 
-- Next.js
-- Styled Components
-- Styled JSX (with Sass support)
-- Ethers
-- Wagmi
-- RainbowKit
-- Plausible Analytics
+- create different button states for wallet disconnected, wallet connected, pending transaction, failed transaction, successful transaction
+- create different inputs for different data types (string, number, etc.)
+- validate data like address, ENS name, bytes32, etc.
+- transform data like seconds to years
 
-It also includes hooks that I tend to use often and my eslint/prettier configuration to keep things consistent.
+The goal of this library is to take care of all the above for you.
 
-For easy coloring with built-in light/dark mode via CSS custom properties, I've included [Radix's color system](https://www.radix-ui.com/colors). It's commented out by default to reduce bundle size (~10kb compressed), but you can uncomment it in [`src/styles/style.scss`](src/styles/style.scss) if you want to use it.
-
-Inspired by [@carlosdp/starter-web3](https://github.com/carlosdp/starter-web3)
+Note: This repo is just an example project for faster iterations (most relevant code in [src/components/Contract](src/components/Contract)). Will separate it into a package soon.
