@@ -25,14 +25,12 @@ export function Root({ abi, address, children, ...props }: RootProps) {
   const [inputs, setInputs] = useState<InputValue[]>([])
   const [state, setState] = useState<State>({ status: 'idle' })
 
-  // TODO: support multiple inputs
-  const input = inputs[0]
-
+  // TODO: support inputs in any order
   const prepareTx = usePrepareContractWrite({
     address,
     abi,
     functionName,
-    args: [input?.value],
+    args: inputs.map((input) => input.value),
     onError: (error) => {
       setState({ status: 'error', message: error.message })
     },
