@@ -16,7 +16,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function Input({ label, param, validation, ...props }: InputProps) {
-  const { inputs, setInputs } = useContext(ContractContext)
+  const { inputs, setInputs, state } = useContext(ContractContext)
   const [value, setValue] = useState('')
 
   const isValid = validation && value ? validation(value) : undefined
@@ -35,7 +35,11 @@ export function Input({ label, param, validation, ...props }: InputProps) {
   return (
     <InputWrapper>
       {label && <Label htmlFor={param}>{label}</Label>}
-      <StyledInput {...props} onChange={(e) => setValue(e.target.value)} />
+      <StyledInput
+        disabled={state.status !== 'idle'}
+        onChange={(e) => setValue(e.target.value)}
+        {...props}
+      />
 
       {isValid !== undefined && (
         <ValidationIconWrapper isValid={isValid}>

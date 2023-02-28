@@ -73,6 +73,7 @@ export const StyledInput = styled.input`
   &:disabled {
     color: inherit;
     background-color: inherit;
+    cursor: not-allowed;
   }
 `
 
