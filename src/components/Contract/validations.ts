@@ -11,7 +11,16 @@ export function validateAddress(address: string): boolean {
   return isValidAddress
 }
 
-export function validateEnsName(name: string, provider: Provider): boolean {
-  // check if it's a valid ENS name
+export async function validateEnsName(
+  name: string,
+  provider?: Provider
+): Promise<boolean> {
+  const address = provider ? await provider.resolveName(name) : null
+  console.log(address)
+
+  if (!address) {
+    return false
+  }
+
   return true
 }

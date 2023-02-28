@@ -3,7 +3,10 @@ import Head from 'next/head'
 import { useAccount, useEnsName, useNetwork } from 'wagmi'
 
 import { Contract } from '../components/Contract'
-import { validateAddress } from '../components/Contract/validations'
+import {
+  validateAddress,
+  validateEnsName,
+} from '../components/Contract/validations'
 import { abi, getReverseRegistrarAddress } from '../contract'
 import useIsMounted from '../hooks/useIsMounted'
 
@@ -44,7 +47,7 @@ export default function Home() {
           <Contract.Input
             param="name"
             label="Name"
-            validation={validateAddress}
+            validation={validateEnsName}
             placeholder="gregskril.eth"
           />
           <Contract.Button functionName="setName" />

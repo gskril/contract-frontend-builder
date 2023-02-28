@@ -1,6 +1,8 @@
+import { Provider } from '@wagmi/core'
 import { useContext, useEffect, useState } from 'react'
 
 import { useDebounce } from '../../hooks/useDebounce'
+import { useValidation } from '../../hooks/useValidation'
 import { CheckIcon, CrossIcon } from '../Icons'
 import { ContractContext } from './context'
 import {
@@ -13,15 +15,17 @@ import {
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
   param: string
-  validation?: (value: string) => boolean
+  validation?: (
+    value: string,
+    provider?: Provider
+  ) => Promise<boolean> | boolean
 }
 
 export function Input({ label, param, validation, ...props }: InputProps) {
   const { inputs, setInputs, state } = useContext(ContractContext)
   const [_value, setValue] = useState('')
   const value = useDebounce(_value, 500)
-
-  const isValid = validation && value ? validation(value) : undefined
+  const isValid = useValidation(validation, value)
 
   useEffect(() => {
     setInputs([
