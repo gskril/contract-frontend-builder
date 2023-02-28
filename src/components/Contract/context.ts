@@ -8,6 +8,7 @@ export interface State {
 export interface InputValue {
   param: string
   value: string
+  isValid: boolean | undefined
 }
 
 interface ContextContextType {

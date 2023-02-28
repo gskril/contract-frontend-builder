@@ -33,6 +33,7 @@ export function Input({ label, param, validation, ...props }: InputProps) {
       {
         param: param,
         value: value,
+        isValid: isValid,
       },
     ])
     // eslint-disable-next-line react-hooks/exhaustive-deps

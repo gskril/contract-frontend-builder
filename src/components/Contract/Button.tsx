@@ -20,10 +20,12 @@ export function Button({
   ...props
 }: ButtonProps) {
   const isMounted = useIsMounted()
-  const { setFunctionName, state } = useContext(ContractContext)
+  const { inputs, setFunctionName, state } = useContext(ContractContext)
 
   const { chain } = useNetwork()
   const { isConnected } = useAccount()
+
+  const isInvalid = inputs.some((input) => input.isValid === false)
 
   useEffect(() => {
     setFunctionName(functionName)
@@ -84,7 +86,7 @@ export function Button({
   }
 
   return (
-    <StyledButton type="submit" {...props}>
+    <StyledButton type="submit" disabled={!isInvalid} {...props}>
       {children ? children : 'Send Transaction'}
     </StyledButton>
   )

@@ -16,7 +16,6 @@ export async function validateEnsName(
   provider?: Provider
 ): Promise<boolean> {
   const address = provider ? await provider.resolveName(name) : null
-  console.log(address)
 
   if (!address) {
     return false
