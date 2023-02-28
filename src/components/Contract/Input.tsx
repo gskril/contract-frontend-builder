@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 
+import { useDebounce } from '../../hooks/useDebounce'
 import { CheckIcon, CrossIcon } from '../Icons'
 import { ContractContext } from './context'
 import {
@@ -17,7 +18,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export function Input({ label, param, validation, ...props }: InputProps) {
   const { inputs, setInputs, state } = useContext(ContractContext)
-  const [value, setValue] = useState('')
+  const [_value, setValue] = useState('')
+  const value = useDebounce(_value, 500)
 
   const isValid = validation && value ? validation(value) : undefined
 
