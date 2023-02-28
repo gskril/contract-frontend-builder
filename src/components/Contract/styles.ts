@@ -77,7 +77,7 @@ export const StyledInput = styled.input`
 `
 
 export const StyledButton = styled.button(
-  ({ variant }: { variant?: 'secondary' | 'error' | 'success' }) => css`
+  ({ tone, variant }: { tone?: 'green' | 'red'; variant?: 'secondary' }) => css`
     border: none;
     display: flex;
     justify-content: center;
@@ -90,7 +90,7 @@ export const StyledButton = styled.button(
     line-height: 1;
     font-weight: 600;
     transition: all 150ms ease-in-out;
-    background: rgb(82, 152, 255);
+    background-color: rgb(82, 152, 255);
     color: #fff;
 
     &:hover {
@@ -99,20 +99,44 @@ export const StyledButton = styled.button(
       transform: translateY(-1px);
     }
 
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    ${tone === 'red' &&
+    css`
+      background-color: rgb(213, 85, 85);
+    `}
+
+    ${tone === 'green' &&
+    css`
+      background-color: rgb(29, 175, 131);
+    `}
+
     ${variant === 'secondary' &&
     css`
-      background: rgba(82, 152, 255, 0.15);
+      background-color: rgba(82, 152, 255, 0.15);
       color: rgb(82, 152, 255);
-    `}
 
-    ${variant === 'error' &&
-    css`
-      background: rgb(213, 85, 85);
-    `}
+      ${tone === 'red' &&
+      css`
+        background-color: rgb(249, 231, 231);
+        color: rgb(197, 47, 27);
 
-    ${variant === 'success' &&
-    css`
-      background: rgb(29, 175, 131);
+        &:hover {
+          background-color: rgb(240, 194, 194);
+        }
+      `}
+
+      ${tone === 'green' &&
+      css`
+        background-color: rgb(231, 244, 239);
+        color: rgb(29, 175, 131);
+
+        &:hover {
+          background-color: rgb(203, 231, 220);
+        }
+      `}
     `}
   `
 )

@@ -48,7 +48,7 @@ export function Button({
 
   if (state.status === 'error') {
     return (
-      <StyledButton variant="error" type="submit" {...props}>
+      <StyledButton variant="secondary" tone="red" disabled {...props}>
         {state.message}
       </StyledButton>
     )
@@ -72,7 +72,7 @@ export function Button({
     return (
       <StyledButton
         as="a"
-        variant="success"
+        tone="green"
         href={getEtherscanLink(state.message!, chain)}
         target="_blank"
         rel="noopener noreferrer"
