@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { useAccount, useEnsName, useNetwork } from 'wagmi'
 
 import { Contract } from '../components/Contract'
+import { validateAddress } from '../components/Contract/validations'
 import { abi, getReverseRegistrarAddress } from '../contract'
 import useIsMounted from '../hooks/useIsMounted'
 
@@ -30,7 +31,7 @@ export default function Home() {
       </Head>
 
       <main>
-        {isMounted && (
+        {isMounted && address && (
           <div style={{ marginBottom: '1rem' }}>
             <ConnectButton showBalance={false} />
             <p style={{ marginTop: '0.25rem' }}>
@@ -43,6 +44,7 @@ export default function Home() {
           <Contract.Input
             param="name"
             label="Name"
+            validation={validateAddress}
             placeholder="gregskril.eth"
           />
           <Contract.Button functionName="setName" />

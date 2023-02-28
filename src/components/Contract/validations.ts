@@ -1,0 +1,17 @@
+import { Provider } from '@wagmi/core'
+import { isAddress } from 'ethers/lib/utils.js'
+
+export function validateAddress(address: string): boolean {
+  const isValidAddress = isAddress(address)
+
+  if (!isValidAddress) {
+    // check if it's a valid ENS name
+  }
+
+  return isValidAddress
+}
+
+export function validateEnsName(name: string, provider: Provider): boolean {
+  // check if it's a valid ENS name
+  return true
+}
