@@ -31,8 +31,8 @@ export function Root({ abi, address, children, ...props }: RootProps) {
     abi,
     functionName,
     args: inputs.map((input) => input.value),
-    onError: (error) => {
-      setState({ status: 'error', message: error.message })
+    onError: () => {
+      setState({ status: 'error', message: 'Error Preparing Transaction' })
     },
   })
 
@@ -44,19 +44,13 @@ export function Root({ abi, address, children, ...props }: RootProps) {
     if (tx?.data?.hash) {
       setState({ status: 'pending', message: tx.data.hash })
     } else if (tx.isError) {
-      setState({ status: 'error', message: tx.error?.message })
+      setState({ status: 'idle' })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tx?.data?.hash, tx.isError])
 
   const txReceipt = useWaitForTransaction({
     hash: tx?.data?.hash,
-    onSuccess: () => {
-      setState({ status: 'success' })
-    },
-    onError: (error) => {
-      setState({ status: 'error', message: error.message })
-    },
   })
 
   // Handle state from txReceipt
