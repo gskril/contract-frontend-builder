@@ -40,7 +40,7 @@ export default function Home() {
           </div>
         )}
 
-        <Contract.Root abi={abi} address={contractAddress}>
+        <Contract.Root address={contractAddress}>
           <Contract.Input
             param="name"
             label="Name"

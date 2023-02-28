@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import {
   useAccount,
   useContractWrite,
+  useNetwork,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
@@ -12,18 +13,35 @@ import { ContractContext, InputValue, State } from './context'
 import { Container } from './styles'
 
 interface RootProps extends React.HTMLAttributes<HTMLFormElement> {
-  abi: Abi
+  abi?: Abi
   address: `0x${string}`
   children: React.ReactNode
 }
 
-export function Root({ abi, address, children, ...props }: RootProps) {
+export function Root({ abi: _abi, address, children, ...props }: RootProps) {
+  const { chain } = useNetwork()
   const { isConnected } = useAccount()
   const { openConnectModal } = useConnectModal()
 
   const [functionName, setFunctionName] = useState<string>('')
   const [inputs, setInputs] = useState<InputValue[]>([])
   const [state, setState] = useState<State>({ status: 'idle' })
+  const [abi, setAbi] = useState<Abi | undefined>(_abi)
+
+  // Fetch ABI if not provided
+  useEffect(() => {
+    if (!_abi) {
+      fetch(
+        `https://abidata.net/${address}?network=${chain?.name?.toLowerCase()}`
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.ok) {
+            setAbi(res.abi)
+          }
+        })
+    }
+  }, [_abi, address, chain?.name])
 
   // TODO: support inputs in any order
   const prepareTx = usePrepareContractWrite({
